@@ -1,6 +1,7 @@
 package edu.neu.thymeleafcruddatabase.controller;
 
-import edu.neu.thymeleafcruddatabase.model.Employee;
+import edu.neu.thymeleafcruddatabase.entity.Employee;
+import edu.neu.thymeleafcruddatabase.service.EmployeeService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -13,22 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-  private List<Employee> employees;
+  private final EmployeeService employeeService;
 
-  @PostConstruct
-  private void loadData(){
-    Employee emp1 = new Employee(1L,"Leslie","Andrews","leslie@luv2code.com");
-    Employee emp2 = new Employee(2L,"Emma","Brandon","emma@luv2code.com");
-    Employee emp3 = new Employee(3L,"Mary","Smith","mary@luv2code.com");
-    employees = new ArrayList<>();
-    employees.add(emp1);
-    employees.add(emp2);
-    employees.add(emp3);
+  public EmployeeController(EmployeeService employeeService) {
+    this.employeeService = employeeService;
   }
 
   @GetMapping("/list")
   public String listEmployees(Model model) {
-    model.addAttribute("employees", employees);
+    model.addAttribute("employees", employeeService.findAll());
     return "list-employees";
   }
 }
